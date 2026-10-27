@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeAcademy — премиум курсы программирования</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070f;
+    --glass: rgba(255,255,255,.055);
+    --border: rgba(255,255,255,.12);
+    --text: #f2f6ff;
+    --muted: #9aa8c7;
+    --purple: #8b5cff;
+    --cyan: #00e5ff;
+    --pink: #ff4ecd;
+    --gold: #ffd166;
+    --good: #2ee6a8;
+    --bad: #ff5470;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Manrope, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: .38;
+    z-index: -2;
+    animation: orb 20s ease-in-out infinite;
+  }
+
+  .orb1 { width: 500px; height: 500px; background: var(--purple); top: -150px; left: -150px; }
+  .orb2 { width: 550px; height: 550px; background: var(--cyan); bottom: -180px; right: -160px; animation-delay: 5s; }
+  .orb3 { width: 350px; height: 350px; background: var(--pink); top: 45%; left: 55%; animation-delay: 10s; }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 55px 55px;
+    mask-image: radial-gradient(circle at center, black 20%, transparent 75%);
+    z-index: -1;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 30px;
+    background: rgba(5,7,15,.72);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--purple), var(--cyan), var(--pink));
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 7s linear infinite;
+  }
+
+  nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+  button {
+    font-family: Manrope, Arial, sans-serif;
+    background: rgba(255,255,255,.07);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 11px 17px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .25s;
+    backdrop-filter: blur(12px);
+  }
+
+  button:hover {
+    background: rgba(255,255,255,.15);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(139,92,255,.25);
+  }
+
+  .primary {
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border: none;
+    font-weight: 800;
+    padding: 16px 32px;
+    font-size: 16px;
+    animation: float 3.5s ease-in-out infinite;
+  }
+
+  main { max-width: 1200px; margin: auto; padding: 32px 22px 70px; }
+
+  .hero {
+    text-align: center;
+    padding: 100px 25px;
+    border-radius: 34px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(22px);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,.45);
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from 0deg, transparent, var(--purple), transparent, var(--cyan), transparent);
+    animation: spin 8s linear infinite;
+    opacity: .18;
+    z-index: -1;
+  }
+
+  .hero h1 {
+    font-size: 52px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+    background: linear-gradient(90deg, #fff, var(--cyan), var(--purple), #fff);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 8s linear infinite;
+  }
+
+  .hero p {
+    color: var(--muted);
+    max-width: 720px;
+    margin: 0 auto 25px;
+    font-size: 18px;
+    animation: appear 1.2s ease;
+  }
+
+  .typing {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--cyan);
+    font-size: 19px;
+    margin-bottom: 22px;
+    min-height: 26px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 20px;
+    background: var(--cyan);
+    vertical-align: middle;
+    animation: blink .8s steps(2) infinite;
+  }
+
+  .symbols span {
+    position: absolute;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    color: rgba(255,255,255,.14);
+    font-size: 34px;
+    animation: floatCode 10s ease-in-out infinite;
+  }
+
+  .s1 { top: 16%; left: 7%; }
+  .s2 { top: 68%; left: 15%; animation-delay: 1s; }
+  .s3 { top: 22%; right: 10%; animation-delay: 2s; }
+  .s4 { top: 72%; right: 20%; animation-delay: 3s; }
+  .s5 { top: 10%; right: 36%; animation-delay: 4s; }
+  .s6 { bottom: 12%; left: 42%; animation-delay: 5s; }
+
+  .title {
+    font-size: 32px;
+    margin: 50px 0 22px;
+    text-align: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+  }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 28px;
+    backdrop-filter: blur(18px);
+    transition: .3s;
+    animation: appear .8s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-12px);
+    border-color: rgba(139,92,255,.65);
+    box-shadow: 0 30px 70px rgba(139,92,255,.28);
+  }
+
+  .card h3 { margin-bottom: 10px; font-size: 22px; }
+  .card p { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+
+  .price {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 16px;
+  }
+
+  .lesson {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 34px;
+    backdrop-filter: blur(20px);
+    margin-top: 25px;
+    animation: appear .6s ease;
+  }
+
+  .levels {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .level-btn.active {
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border: none;
+    font-weight: 700;
+  }
+
+  .lesson-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .lesson-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    cursor: pointer;
+    transition: .25s;
+  }
+
+  .lesson-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--cyan);
+    box-shadow: 0 18px 40px rgba(0,229,255,.15);
+  }
+
+  .theory h3 { color: var(--cyan); margin: 22px 0 10px; }
+  .theory p { color: #d9e4ff; line-height: 1.75; margin-bottom: 10px; }
+  .theory ul { margin: 10px 0 15px 22px; }
+  .theory li { margin-bottom: 7px; }
+
+  code {
+    font-family: "JetBrains Mono", monospace;
+    background: rgba(0,229,255,.1);
+    color: var(--cyan);
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+
+  pre {
+    font-family: "JetBrains Mono", monospace;
+    background: rgba(0,0,0,.5);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    overflow: auto;
+    color: #d9e4ff;
+    margin: 16px 0;
+  }
+
+  textarea {
+    width: 100%;
+    height: 170px;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    font-family: "JetBrains Mono", monospace;
+    resize: vertical;
+  }
+
+  .quiz {
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 22px;
+    margin: 22px 0;
+  }
+
+  .quiz label { display: block; margin: 9px 0; cursor: pointer; }
+
+  .good { color: var(--good); font-weight: 700; }
+  .bad { color: var(--bad); font-weight: 700; }
+
+  details {
+    margin-top: 15px;
+    background: rgba(255,209,102,.08);
+    border: 1px solid rgba(255,209,102,.28);
+    border-radius: 16px;
+    padding: 13px 17px;
+  }
+
+  summary { cursor: pointer; font-weight: 700; color: var(--gold); }
+  details p { margin-top: 10px; color: #ffe9b8; }
+
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.open { display: flex; }
+
+  .modal-box {
+    background: rgba(13,18,34,.96);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 34px;
+    width: min(440px, 94vw);
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    position: relative;
+    animation: appear .4s ease;
+  }
+
+  input {
+    background: rgba(0,0,0,.45);
+    border: 1px solid var(--border);
+    color: #fff;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .close-x {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    font-size: 20px;
+    padding: 5px 10px;
+  }
+
+  .hidden { display: none !important; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes orb {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(70px, 45px) scale(1.12); }
+    66% { transform: translate(-45px, 35px) scale(.94); }
+  }
+
+  @keyframes floatCode {
+    0%, 100% { transform: translateY(0) rotate(0); opacity: .14; }
+    50% { transform: translateY(-35px) rotate(14deg); opacity: .4; }
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 32px; }
+    header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="grid-bg"></div>
+
+<header>
+  <div class="logo">💻 CodeAcademy</div>
+  <nav>
+    <button onclick="setLang('ru')">RU</button>
+    <button onclick="setLang('en')">EN</button>
+    <button id="homeBtn" onclick="showHome()">Главная</button>
+    <button id="coursesBtn" onclick="showCourses()">Курсы</button>
+    <button id="profileButton" class="hidden" onclick="showProfile()">Профиль</button>
+    <button id="authButton" onclick="openAuth()">Войти</button>
+    <button id="adminButton" class="hidden" onclick="showAdmin()">Админ</button>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <div class="hero">
+      <div class="symbols">
+        <span class="s1">{ }</span>
+        <span class="s2">&lt;/&gt;</span>
+        <span class="s3">#</span>
+        <span class="s4">$</span>
+        <span class="s5">★</span>
+        <span class="s6">;</span>
+      </div>
+
+      <div class="typing">
+        <span id="typingText"></span><span class="cursor">&nbsp;</span>
+      </div>
+
+      <h1 id="heroTitle">Профессиональные курсы программирования</h1>
+      <p id="heroText">
+        Более 100 уроков в каждом курсе. Уровни Junior, Middle и Senior,
+        подробные объяснения, тесты, практические задания и подсказки.
+      </p>
+
+      <button id="chooseCourseBtn" class="primary" onclick="showCourses()">Выбрать курс</button>
+    </div>
+  </section>
+
+  <section id="coursesPage" class="hidden">
+    <h2 id="coursesTitle" class="title">Выбери курс</h2>
+    <div id="courses" class="grid"></div>
+  </section>
+
+  <section id="coursePage" class="hidden">
+    <button id="backToCoursesBtn" onclick="showCourses()">← Все курсы</button>
+    <div id="courseHeader"></div>
+    <div id="levels" class="levels"></div>
+    <div id="lessons" class="lesson-list"></div>
+  </section>
+
+  <section id="lessonPage" class="lesson hidden">
+    <button onclick="openCourse(currentCourse)">← К урокам курса</button>
+    <div id="lessonContent"></div>
+  </section>
+
+  <section id="adminPage" class="lesson hidden">
+    <h2 id="adminTitle">Админ-панель</h2>
+    <p id="adminDesc">Здесь видно всех зарегистрированных пользователей.</p>
+    <div id="adminList"></div>
+  </section>
+  <section id="profilePage" class="lesson hidden">
+    <button id="profileBackBtn" onclick="showHome()">← Главная</button>
+    <h2 id="profileTitle">Профиль</h2>
+    <div id="profileInfo"></div>
+  </section>
+
+</main>
+
+<div id="authModal" class="modal">
+  <div class="modal-box">
+    <button class="close-x" onclick="closeAuth()">✕</button>
+    <h3 id="authTitle">Создать профиль / Войти</h3>
+    <input id="firstName" placeholder="Имя">
+    <input id="lastName" placeholder="Фамилия">
+    <input id="middleName" placeholder="Отчество">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Пароль">
+    <button id="registerBtn" onclick="register()">Создать аккаунт</button>
+    <button id="loginBtn" onclick="login()">Войти</button>
+    <button id="closeAuthBtn" onclick="closeAuth()">Закрыть</button>
+  </div>
+</div>
+
+<footer id="footerText">© 2026 CodeAcademy</footer>
+
+<script>
+const courseInfo = {
+  html: { name: "HTML", price: 10000, stripeLink: "ВСТАВЬ_ССЫЛКУ_STRIPE" },
+  css: { name: "CSS", price: 10000, stripeLink: "ВСТАВЬ_ССЫЛКУ_STRIPE" },
+  javascript: { name: "JavaScript", price: 10000, stripeLink: "ВСТАВЬ_ССЫЛКУ_STRIPE" },
+  python: { name: "Python", price: 10000, stripeLink: "ВСТАВЬ_ССЫЛКУ_STRIPE" }
+};
+
+const topics = {
+  html: [
+    {
+      t: "Структура HTML-страницы",
+      theory: "HTML — язык разметки. Страница начинается с <!DOCTYPE html>, затем идут теги html, head и body. В head подключают стили и указывают название страницы, а в body размещают видимый контент.",
+      example: "<!DOCTYPE html>\n<html>\n<head><title>Мой сайт</title></head>\n<body>\n  <h1>Привет!</h1>\n</body>\n</html>",
+      quiz: { q: "Где размещается видимый контент страницы?", o: ["head", "body", "title", "style"], a: 1, h: "Всё, что видит пользователь, находится внутри body." },
+      task: { text: "Создай страницу с заголовком h1 Привет.", h: "Используй теги html, body и h1.", check: c => c.includes("<h1>") && c.includes("</h1>") }
+    },
+    {
+      t: "Заголовки и текст",
+      theory: "Заголовки создаются тегами h1–h6. h1 — самый важный заголовок, h6 — самый маленький. Обычный текст пишут в теге p.",
+      example: "<h1>Главный заголовок</h1>\n<h2>Подзаголовок</h2>\n<p>Обычный текст.</p>",
+      quiz: { q: "Какой тег делает обычный абзац?", o: ["<h1>", "<p>", "<a>", "<div>"], a: 1, h: "Абзац начинается на букву p." },
+      task: { text: "Создай h1 и абзац p с любым текстом.", h: "Используй <h1></h1> и <p></p>.", check: c => c.includes("<h1>") && c.includes("<p>") }
+    },
+    {
+      t: "Ссылки",
+      theory: "Ссылка создаётся тегом a. Адрес указывается в атрибуте href. Текст ссылки пишется между открывающим и закрывающим тегом.",
+      example: '<a href="https://google.com">Перейти в Google</a>',
+      quiz: { q: "Какой атрибут задаёт адрес ссылки?", o: ["src", "href", "link", "url"], a: 1, h: "Атрибут начинается с буквы h." },
+      task: { text: "Создай ссылку на https://google.com.", h: "Используй <a href=\"...\">текст</a>.", check: c => /<a\s+href=["']https:\/\/google\.com["']/.test(c) }
+    },
+    {
+      t: "Изображения",
+      theory: "Картинка добавляется тегом img. Он не закрывается. Адрес картинки указывают в src, а описание — в alt.",
+      example: '<img src="photo.jpg" alt="Моё фото">',
+      quiz: { q: "Какой атрибут описывает картинку?", o: ["alt", "href", "style", "class"], a: 0, h: "Этот атрибут помогает понять изображение, если оно не загрузилось." },
+      task: { text: "Добавь картинку photo.jpg с описанием.", h: "Используй src и alt.", check: c => /<img[^>]+src=["']photo\.jpg["'][^>]*alt=/.test(c) }
+    },
+    {
+      t: "Списки",
+      theory: "Маркированный список создаётся тегом ul, а каждый пункт — тегом li. Нумерованный список создаётся тегом ol.",
+      example: "<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>",
+      quiz: { q: "Какой тег создаёт пункт списка?", o: ["<li>", "<ul>", "<ol>", "<list>"], a: 0, h: "Пункт списка — li." },
+      task: { text: "Создай список из двух пунктов.", h: "Используй ul и два li.", check: c => c.includes("<ul>") && (c.match(/<li>/g) || []).length >= 2 }
+    },
+    {
+      t: "Формы",
+      theory: "Форма создаётся тегом form. Внутри добавляют input, textarea и button. Атрибут type задаёт тип поля.",
+      example: "<form>\n  <input type=\"text\">\n  <button>Отправить</button>\n</form>",
+      quiz: { q: "Какой тег создаёт поле ввода?", o: ["<input>", "<form>", "<button>", "<label>"], a: 0, h: "Поле ввода — input." },
+      task: { text: "Создай форму с полем ввода и кнопкой.", h: "Используй form, input и button.", check: c => c.includes("<form") && c.includes("<input") && c.includes("<button") }
+    },
+    {
+      t: "Таблицы",
+      theory: "Таблица создаётся тегом table. Строки — tr, ячейки — td, заголовки — th.",
+      example: "<table>\n  <tr><th>Имя</th></tr>\n  <tr><td>Anna</td></tr>\n</table>",
+      quiz: { q: "Какой тег создаёт строку таблицы?", o: ["<tr>", "<td>", "<table>", "<th>"], a: 0, h: "Строка — table row." },
+      task: { text: "Создай таблицу с одной строкой.", h: "Используй table, tr и td.", check: c => c.includes("<table") && c.includes("<tr>") && c.includes("<td>") }
+    },
+    {
+      t: "Классы и идентификаторы",
+      theory: "Атрибут class присваивает элементу класс, а id — уникальный идентификатор. Их используют CSS и JavaScript.",
+      example: '<p class="text">Привет</p>\n<div id="main">Контент</div>',
+      quiz: { q: "Какой атрибут должен быть уникальным на странице?", o: ["class", "id", "style", "href"], a: 1, h: "id — уникальный идентификатор." },
+      task: { text: "Создай элемент с классом box и id main.", h: "Используй class=\"box\" и id=\"main\".", check: c => /class=["']box["']/.test(c) && /id=["']main["']/.test(c) }
+    },
+    {
+      t: "Семантические теги",
+      theory: "Семантические теги описывают смысл части страницы: header, nav, main, section, footer. Они помогают браузерам и поисковым системам понимать структуру сайта.",
+      example: "<header></header>\n<main></main>\n<footer></footer>",
+      quiz: { q: "Какой тег обозначает подвал сайта?", o: ["<header>", "<footer>", "<main>", "<nav>"], a: 1, h: "Подвал по-английски — footer." },
+      task: { text: "Создай header, main и footer.", h: "Используй три семантических тега.", check: c => c.includes("<header") && c.includes("<main") && c.includes("<footer") }
+    },
+    {
+      t: "Атрибуты",
+      theory: "Атрибуты добавляют тегам дополнительную информацию. Они пишутся внутри открывающего тега: href, src, alt, class, id.",
+      example: '<a href="https://site.com">Ссылка</a>',
+      quiz: { q: "Где пишутся атрибуты?", o: ["Внутри открывающего тега", "После закрывающего тега", "В отдельном файле", "Внутри текста"], a: 0, h: "Атрибуты пишутся в открывающем теге." },
+      task: { text: "Создай ссылку с атрибутом href.", h: "Используй <a href=\"...\">.", check: c => /<a[^>]+href=/.test(c) }
+    },
+    {
+      t: "Комментарии",
+      theory: "Комментарии не видны на странице. Они помогают оставлять заметки в коде. Начинаются с <!-- и заканчиваются -->.",
+      example: "<!-- Это комментарий -->",
+      quiz: { q: "Как начинается HTML-комментарий?", o: ["<!--", "//", "/*", "#"], a: 0, h: "Комментарий начинается с двух дефисов и восклицательного знака." },
+      task: { text: "Добавь HTML-комментарий.", h: "Используй <!-- текст -->.", check: c => c.includes("<!--") && c.includes("-->") }
+    },
+    {
+      t: "Формы и валидация",
+      theory: "Атрибут required делает поле обязательным. Атрибут placeholder показывает подсказку внутри поля. Тип email проверяет, что введён email.",
+      example: '<input type="email" required placeholder="Введите email">',
+      quiz: { q: "Какой атрибут делает поле обязательным?", o: ["required", "placeholder", "value", "name"], a: 0, h: "Обязательное поле — required." },
+      task: { text: "Создай обязательное поле email.", h: "Используй type=\"email\" и required.", check: c => /type=["']email["']/.test(c) && /required/.test(c) }
+    }
+  ],
+
+  css: [
+    {
+      t: "Селекторы",
+      theory: "CSS выбирает элементы и меняет их стиль. Селектор p выбирает все абзацы, .box — элементы с классом box, #main — элемент с id main.",
+      example: "p { color: white; }\n.box { background: blue; }\n#main { padding: 20px; }",
+      quiz: { q: "Как выбрать класс?", o: [".box", "#box", "box", "<box>"], a: 0, h: "Перед классом ставится точка." },
+      task: { text: "Сделай класс box синим.", h: "Используй .box { color: blue; }", check: c => /\.box\s*{[\s\S]*color\s*:\s*blue/i.test(c) }
+    },
+    {
+      t: "Цвета",
+      theory: "Цвет можно задать словом, hex-кодом или rgb. Например: red, #ff0000, rgb(255,0,0).",
+      example: "h1 { color: #00e5ff; }",
+      quiz: { q: "Какой цвет у #ff0000?", o: ["Синий", "Красный", "Зелёный", "Белый"], a: 1, h: "ff0000 — красный." },
+      task: { text: "Сделай h1 красным через hex-код.", h: "Используй color: #ff0000;", check: c => /color\s*:\s*#ff0000/i.test(c) }
+    },
+    {
+      t: "Шрифты",
+      theory: "font-family задаёт шрифт, font-size — размер, font-weight — жирность.",
+      example: "p {\n  font-family: Arial;\n  font-size: 18px;\n  font-weight: bold;\n}",
+      quiz: { q: "Какое свойство задаёт размер шрифта?", o: ["font-size", "font-family", "font-weight", "text-size"], a: 0, h: "Размер — size." },
+      task: { text: "Сделай p размером 20px.", h: "Используй font-size: 20px;", check: c => /font-size\s*:\s*20px/i.test(c) }
+    },
+    {
+      t: "Отступы",
+      theory: "margin — внешний отступ, padding — внутренний. Их можно задавать для всех сторон или отдельно.",
+      example: ".box {\n  margin: 20px;\n  padding: 15px;\n}",
+      quiz: { q: "Какое свойство создаёт внутренний отступ?", o: ["margin", "padding", "border", "gap"], a: 1, h: "Внутренний отступ — padding." },
+      task: { text: "Добавь классу box padding 20px.", h: "Используй padding: 20px;", check: c => /padding\s*:\s*20px/i.test(c) }
+    },
+    {
+      t: "Границы",
+      theory: "border создаёт границу. Можно задать толщину, стиль и цвет: border: 2px solid red;",
+      example: ".box { border: 2px solid cyan; }",
+      quiz: { q: "Какое значение делает границу сплошной?", o: ["solid", "dashed", "none", "round"], a: 0, h: "Сплошная линия — solid." },
+      task: { text: "Сделай границу 2px solid red.", h: "Используй border: 2px solid red;", check: c => /border\s*:\s*2px\s+solid\s+red/i.test(c) }
+    },
+    {
+      t: "Flexbox",
+      theory: "Flexbox помогает выравнивать элементы. Свойство display: flex включает гибкое расположение, justify-content — по горизонтали, align-items — по вертикали.",
+      example: ".menu {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}",
+      quiz: { q: "Как включить Flexbox?", o: ["display: flex;", "flex: on;", "position: flex;", "align: flex;"], a: 0, h: "Начинается с display." },
+      task: { text: "Включи Flexbox для класса menu.", h: "Используй display: flex;", check: c => /display\s*:\s*flex/i.test(c) }
+    },
+    {
+      t: "Grid",
+      theory: "Grid создаёт сетку. Свойство grid-template-columns задаёт колонки, а gap — расстояние между элементами.",
+      example: ".grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 20px;\n}",
+      quiz: { q: "Какое свойство задаёт колонки в Grid?", o: ["grid-template-columns", "flex-direction", "columns", "grid-gap"], a: 0, h: "Колонки — columns." },
+      task: { text: "Создай Grid с двумя колонками.", h: "Используй display: grid; и grid-template-columns: 1fr 1fr;", check: c => /display\s*:\s*grid/i.test(c) && /grid-template-columns/i.test(c) }
+    },
+    {
+      t: "Позиционирование",
+      theory: "position меняет расположение элемента. Значения: static, relative, absolute, fixed, sticky.",
+      example: ".box { position: fixed; top: 0; right: 0; }",
+      quiz: { q: "Какое значение фиксирует элемент на экране?", o: ["fixed", "relative", "static", "absolute"], a: 0, h: "Фиксированное положение — fixed." },
+      task: { text: "Сделай элемент fixed.", h: "Используй position: fixed;", check: c => /position\s*:\s*fixed/i.test(c) }
+    },
+    {
+      t: "Анимации",
+      theory: "Анимации создаются через @keyframes и свойство animation. В keyframes описывают, как элемент меняется.",
+      example: "@keyframes move {\n  from { transform: translateY(0); }\n  to { transform: translateY(-20px); }\n}",
+      quiz: { q: "Какое правило создаёт анимацию?", o: ["@keyframes", "@media", "@import", "@animation"], a: 0, h: "Начинается с @keyframes." },
+      task: { text: "Создай keyframes с названием move.", h: "Используй @keyframes move { }", check: c => /@keyframes\s+move/i.test(c) }
+    },
+    {
+      t: "Тени",
+      theory: "box-shadow добавляет тень блоку. Можно задать смещение, размытие и цвет.",
+      example: ".card { box-shadow: 0 10px 30px rgba(0,0,0,.4); }",
+      quiz: { q: "Какое свойство добавляет тень?", o: ["box-shadow", "shadow", "text-shadow", "border-shadow"], a: 0, h: "Тень блока — box-shadow." },
+      task: { text: "Добавь тень классу card.", h: "Используй box-shadow.", check: c => /box-shadow/i.test(c) }
+    },
+    {
+      t: "Адаптивность",
+      theory: "Медиазапросы меняют стили для разных экранов. Например, @media (max-width: 600px) применится на телефоне.",
+      example: "@media (max-width: 600px) {\n  h1 { font-size: 24px; }\n}",
+      quiz: { q: "Какое правило используется для адаптивности?", o: ["@media", "@keyframes", "@import", "@font"], a: 0, h: "Медиазапрос начинается с @media." },
+      task: { text: "Создай медиазапрос для ширины 600px.", h: "Используй @media (max-width: 600px) { }", check: c => /@media[^{]*600px/i.test(c) }
+    },
+    {
+      t: "Градиенты",
+      theory: "Градиент создаётся через linear-gradient. Можно указать направление и несколько цветов.",
+      example: "background: linear-gradient(90deg, purple, cyan);",
+      quiz: { q: "Какая функция создаёт линейный градиент?", o: ["linear-gradient", "color-gradient", "gradient()", "bg-gradient"], a: 0, h: "Линейный — linear." },
+      task: { text: "Сделай градиент из purple в cyan.", h: "Используй linear-gradient(90deg, purple, cyan);", check: c => /linear-gradient\([^)]*purple[^)]*cyan/i.test(c) }
+    }
+  ],
+
+  javascript: [
+    {
+      t: "Переменные",
+      theory: "Переменная хранит значение. let создаёт изменяемую переменную, const — постоянную. var использовать не рекомендуется.",
+      example: "let name = \"Anna\";\nconst age = 18;",
+      quiz: { q: "Как создать постоянную переменную?", o: ["let", "const", "var", "static"], a: 1, h: "Постоянная — const." },
+      task: { text: "Создай const city со значением London.", h: "Используй const city = \"London\";", check: c => /const\s+city\s*=\s*["']london["']/i.test(c) }
+    },
+    {
+      t: "Типы данных",
+      theory: "В JavaScript есть строки, числа, булевы значения, массивы, объекты, null и undefined.",
+      example: "let text = \"Hi\";\nlet number = 10;\nlet isActive = true;",
+      quiz: { q: "Какой тип у значения true?", o: ["String", "Number", "Boolean", "Array"], a: 2, h: "true и false — Boolean." },
+      task: { text: "Создай булеву переменную isActive со значением true.", h: "Используй let isActive = true;", check: c => /isActive\s*=\s*true/.test(c) }
+    },
+    {
+      t: "Функции",
+      theory: "Функция — блок кода, который можно вызывать много раз. Она может принимать параметры и возвращать результат.",
+      example: "function add(a, b) {\n  return a + b;\n}",
+      quiz: { q: "Что делает return?", o: ["Выводит текст", "Возвращает результат", "Создаёт переменную", "Останавливает сайт"], a: 1, h: "return возвращает значение." },
+      task: { text: "Напиши функцию add(a, b), возвращающую сумму.", h: "Используй return a + b;", check: c => { try { return new Function(c + " return add(2,3);")() === 5; } catch(e) { return false; } } }
+    },
+    {
+      t: "Условия",
+      theory: "if проверяет условие. else выполняется, если условие ложное.",
+      example: "let age = 18;\nif (age >= 18) {\n  console.log(\"Взрослый\");\n} else {\n  console.log(\"Ребёнок\");\n}",
+      quiz: { q: "Какой оператор означает «больше или равно»?", o: [">", ">=", "<", "=="], a: 1, h: "Больше или равно — два символа." },
+      task: { text: "Напиши if, который проверяет age >= 18.", h: "Используй if (age >= 18) { }", check: c => /if\s*\(\s*age\s*>=\s*18\s*\)/.test(c) }
+    },
+    {
+      t: "Циклы",
+      theory: "Цикл for повторяет код несколько раз. У него есть счётчик, условие и изменение счётчика.",
+      example: "for (let i = 0; i < 5; i++) {\n  console.log(i);\n}",
+      quiz: { q: "Сколько раз выполнится цикл for (let i = 0; i < 5; i++)?", o: ["4", "5", "6", "Бесконечно"], a: 1, h: "От 0 до 4 — пять раз." },
+      task: { text: "Напиши цикл от 0 до 4.", h: "Используй for (let i = 0; i < 5; i++)", check: c => /for\s*\(\s*let\s+i\s*=\s*0\s*;\s*i\s*<\s*5/.test(c) }
+    },
+    {
+      t: "Массивы",
+      theory: "Массив хранит несколько значений. Элементы нумеруются с нуля.",
+      example: "let fruits = [\"apple\", \"banana\"];\nconsole.log(fruits[0]);",
+      quiz: { q: "Какой индекс у первого элемента массива?", o: ["0", "1", "-1", "first"], a: 0, h: "Нумерация начинается с нуля." },
+      task: { text: "Создай массив из трёх фруктов.", h: "Используй квадратные скобки и запятые.", check: c => /\[[^\]]*,[^\]]*,[^\]]*\]/.test(c) }
+    },
+    {
+      t: "Объекты",
+      theory: "Объект хранит данные в виде ключей и значений.",
+      example: "let user = {\n  name: \"Anna\",\n  age: 18\n};",
+      quiz: { q: "Как получить имя из объекта user?", o: ["user.name", "user->name", "user[name]", "getName(user)"], a: 0, h: "Используется точка." },
+      task: { text: "Создай объект user со свойством name.", h: "Используй фигурные скобки и name: \"...\"", check: c => /name\s*:\s*["'][^"']+["']/.test(c) }
+    },
+    {
+      t: "Стрелочные функции",
+      theory: "Стрелочная функция — короткая запись функции.",
+      example: "const add = (a, b) => a + b;",
+      quiz: { q: "Какой символ используется в стрелочной функции?", o: ["=>", "->", "::", "**"], a: 0, h: "Стрелка состоит из равно и больше." },
+      task: { text: "Создай стрелочную функцию add.", h: "Используй const add = (a, b) => a + b;", check: c => /add\s*=\s*\(\s*a\s*,\s*b\s*\)\s*=>/.test(c) }
+    },
+    {
+      t: "DOM",
+      theory: "DOM — представление страницы в JavaScript. Можно находить элементы и менять их текст.",
+      example: "document.querySelector(\"h1\").textContent = \"Привет\";",
+      quiz: { q: "Какой метод находит элемент?", o: ["querySelector", "findElement", "getElement", "search"], a: 0, h: "Метод начинается с query." },
+      task: { text: "Найди элемент h1 через querySelector.", h: "Используй document.querySelector(\"h1\")", check: c => /document\.querySelector\(["']h1["']\)/.test(c) }
+    },
+    {
+      t: "События",
+      theory: "Событие — действие пользователя: клик, ввод текста, движение мыши. addEventListener добавляет обработчик.",
+      example: "button.addEventListener(\"click\", () => {\n  console.log(\"Нажато\");\n});",
+      quiz: { q: "Какое событие происходит при клике?", o: ["click", "submit", "change", "move"], a: 0, h: "Клик — click." },
+      task: { text: "Добавь обработчик клика.", h: "Используй addEventListener(\"click\", ...)", check: c => /addEventListener\(["']click["']/.test(c) }
+    },
+    {
+      t: "Массивы и методы",
+      theory: "map создаёт новый массив, filter отбирает элементы, reduce сводит массив к одному значению.",
+      example: "let numbers = [1, 2, 3];\nlet doubled = numbers.map(n => n * 2);",
+      quiz: { q: "Какой метод создаёт новый массив?", o: ["map", "push", "pop", "splice"], a: 0, h: "map преобразует каждый элемент." },
+      task: { text: "Используй map для массива numbers.", h: "Используй numbers.map(...)", check: c => /numbers\s*\.\s*map/.test(c) }
+    },
+    {
+      t: "Ошибки",
+      theory: "try перехватывает ошибки, catch обрабатывает их. Это помогает сайту не ломаться.",
+      example: "try {\n  riskyFunction();\n} catch (error) {\n  console.log(error);\n}",
+      quiz: { q: "Какой блок обрабатывает ошибку?", o: ["catch", "try", "finally", "error"], a: 0, h: "Ошибка обрабатывается в catch." },
+      task: { text: "Напиши try и catch.", h: "Используй try { } catch (e) { }", check: c => /try\s*{[\s\S]*catch\s*\(/.test(c) }
+    }
+  ],
+
+  python: [
+    {
+      t: "Первые шаги",
+      theory: "Python — язык с простым синтаксисом. Команда print() выводит текст на экран.",
+      example: 'print("Привет!")',
+      quiz: { q: "Какая функция выводит текст?", o: ["print()", "echo", "console.log()", "say()"], a: 0, h: "В Python используется print()." },
+      task: { text: "Выведи Привет, Python.", h: 'Напиши print("Привет, Python")', check: c => /print\s*\(\s*['"]привет,\s*python['"]\s*\)/i.test(c) }
+    },
+    {
+      t: "Переменные",
+      theory: "Переменная хранит значение. В Python не нужно указывать тип.",
+      example: 'name = "Anna"\nage = 18',
+      quiz: { q: "Как создать переменную?", o: ["name = \"Anna\"", "let name", "const name", "var name"], a: 0, h: "В Python используется знак равно." },
+      task: { text: "Создай переменную city со значением London.", h: "Используй city = \"London\"", check: c => /city\s*=\s*["']london["']/i.test(c) }
+    },
+    {
+      t: "Числа",
+      theory: "Python работает с целыми и дробными числами. Операторы: +, -, *, /.",
+      example: "a = 10\nb = 3\nprint(a + b)",
+      quiz: { q: "Что выведет 10 / 2?", o: ["5", "5.0", "10", "ошибка"], a: 1, h: "Деление в Python даёт дробное число." },
+      task: { text: "Выведи результат 10 * 5.", h: "Используй print(10 * 5)", check: c => /print\s*\(\s*10\s*\*\s*5\s*\)/.test(c) }
+    },
+    {
+      t: "Строки",
+      theory: "Строка — текст в кавычках. Метод upper() делает буквы большими, lower() — маленькими.",
+      example: 'name = "anna"\nprint(name.upper())',
+      quiz: { q: "Что делает upper()?", o: ["Делает буквы большими", "Удаляет пробелы", "Считает символы", "Разделяет строку"], a: 0, h: "upper — верхний регистр." },
+      task: { text: "Сделай строку hello большой.", h: "Используй .upper()", check: c => /\.upper\(\)/.test(c) }
+    },
+    {
+      t: "Условия",
+      theory: "if проверяет условие, else выполняется иначе. После условия ставится двоеточие, а следующий блок — с отступом.",
+      example: "age = 18\nif age >= 18:\n    print(\"Взрослый\")",
+      quiz: { q: "Что ставится после условия if?", o: ["Двоеточие", "Точка с запятой", "Фигурные скобки", "Ничего"], a: 0, h: "После условия нужно двоеточие." },
+      task: { text: "Напиши if для age >= 18.", h: "Используй if age >= 18:", check: c => /if\s+age\s*>=\s*18\s*:/.test(c) }
+    },
+    {
+      t: "Цикл for",
+      theory: "Цикл for перебирает элементы. Функция range() создаёт последовательность чисел.",
+      example: "for i in range(5):\n    print(i)",
+      quiz: { q: "Сколько раз выполнится range(5)?", o: ["4", "5", "6", "0"], a: 1, h: "range(5) даёт числа от 0 до 4." },
+      task: { text: "Напиши цикл for с range(5).", h: "Используй for i in range(5):", check: c => /for\s+\w+\s+in\s+range\s*\(\s*5\s*\)/.test(c) }
+    },
+    {
+      t: "Списки",
+      theory: "Список хранит несколько значений в квадратных скобках.",
+      example: "fruits = [\"apple\", \"banana\"]\nprint(fruits[0])",
+      quiz: { q: "Какой индекс у первого элемента?", o: ["0", "1", "-1", "first"], a: 0, h: "Нумерация с нуля." },
+      task: { text: "Создай список из трёх элементов.", h: "Используй квадратные скобки.", check: c => /\[[^\]]*,[^\]]*,[^\]]*\]/.test(c) }
+    },
+    {
+      t: "Функции",
+      theory: "Функция создаётся через def. Она может принимать параметры и возвращать результат.",
+      example: "def add(a, b):\n    return a + b",
+      quiz: { q: "Какое слово создаёт функцию?", o: ["def", "function", "func", "define"], a: 0, h: "В Python используется def." },
+      task: { text: "Создай функцию add(a, b).", h: "Используй def add(a, b):", check: c => /def\s+add\s*\(\s*a\s*,\s*b\s*\)\s*:/.test(c) }
+    },
+    {
+      t: "Словари",
+      theory: "Словарь хранит пары ключ-значение в фигурных скобках.",
+      example: 'user = {"name": "Anna", "age": 18}',
+      quiz: { q: "Как получить name из словаря user?", o: ["user[\"name\"]", "user.name", "user->name", "user::name"], a: 0, h: "В Python используется квадратная скобка." },
+      task: { text: "Создай словарь с ключом name.", h: "Используй фигурные скобки и \"name\": ...", check: c => /["']name["']\s*:/.test(c) }
+    },
+    {
+      t: "Модули",
+      theory: "Модуль — файл с готовыми функциями. Импортируется через import.",
+      example: "import math\nprint(math.sqrt(16))",
+      quiz: { q: "Как импортировать модуль math?", o: ["import math", "include math", "using math", "require math"], a: 0, h: "В Python используется import." },
+      task: { text: "Импортируй math.", h: "Напиши import math", check: c => /import\s+math/.test(c) }
+    },
+    {
+      t: "Ошибки",
+      theory: "try проверяет код, except обрабатывает ошибку.",
+      example: "try:\n    x = 10 / 0\nexcept:\n    print(\"Ошибка\")",
+      quiz: { q: "Какой блок обрабатывает ошибку?", o: ["except", "catch", "finally", "error"], a: 0, h: "В Python используется except." },
+      task: { text: "Напиши try и except.", h: "Используй try: и except:", check: c => /try\s*:[\s\S]*except/.test(c) }
+    },
+    {
+      t: "Файлы",
+      theory: "Файл открывается через open(). Режим r — чтение, w — запись.",
+      example: 'file = open("data.txt", "r")',
+      quiz: { q: "Какой режим открывает файл для чтения?", o: ["r", "w", "x", "a"], a: 0, h: "Чтение — read, то есть r." },
+      task: { text: "Открой файл data.txt для чтения.", h: "Используй open(\"data.txt\", \"r\")", check: c => /open\s*\(\s*["']data\.txt["']\s*,\s*["']r["']\s*\)/.test(c) }
+    }
+  ]
+};
+
+const levels = [
+  { key: "junior", name: "Junior", count: 40 },
+  { key: "middle", name: "Middle", count: 35 },
+  { key: "senior", name: "Senior", count: 30 }
+];
+
+function buildLessons(courseKey) {
+  const bank = topics[courseKey];
+  const all = [];
+
+  levels.forEach(level => {
+    for (let i = 0; i < level.count; i++) {
+      const topic = bank[i % bank.length];
+      const part = Math.floor(i / bank.length) + 1;
+
+      all.push({
+        level: level.key,
+        title: `${topic.t} — часть ${part}`,
+        theory: `
+          <h3>${topic.t}</h3>
+          <p>${topic.theory}</p>
+          <h3>Пример</h3>
+          <pre>${topic.example.replace(/</g, "&lt;")}</pre>
+          <h3>Что практиковать</h3>
+          <p>Повтори пример, измени значения и попробуй написать свой вариант. На уровне ${level.name} задание усложняется: сначала сделай базовый вариант, затем добавь свои детали.</p>
+        `,
+        quiz: topic.quiz,
+        task: topic.task
+      });
+    }
+  });
+
+  return all;
+}
+
+const lessons = {};
+for (let key in topics) {
+  lessons[key] = buildLessons(key);
+}
+
+let lang = "ru";
+let currentCourse = null;
+let currentLevel = "junior";
+let currentLesson = null;
+let user = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+function isAdmin() {
+  return user && user.email === "admin@codeacademy.com";
+}
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem("users") || "[]");
+}
+
+function saveUsers(users) {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+function setLang(newLang) {
+  lang = newLang;
+  showHome();
+}
+
+function showHome() {
+  hideAll();
+  document.getElementById("home").classList.remove("hidden");
+}
+
+function showCourses() {
+  hideAll();
+  document.getElementById("coursesPage").classList.remove("hidden");
+
+  const box = document.getElementById("courses");
+  box.innerHTML = "";
+
+  for (let key in courseInfo) {
+    const paid = user && user.paidCourses && user.paidCourses.includes(key);
+
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${courseInfo[key].name}</h3>
+      <p>105 уроков • Junior, Middle, Senior</p>
+      <div class="price">${courseInfo[key].price.toLocaleString("ru-RU")} ₽</div>
+      ${
+        isAdmin() || paid
+        ? `<button onclick="openCourse('${key}')">Открыть курс</button>`
+        : `<button onclick="pay('${key}')">Оплатить курс</button>`
+      }
+    `;
+    box.appendChild(div);
+  }
+}
+
+function pay(key) {
+  if (isAdmin()) {
+    openCourse(key);
+    return;
+  }
+
+  if (!user) {
+    openAuth();
+    return;
+  }
+
+  const link = courseInfo[key].stripeLink;
+
+  if (link.includes("ВСТАВЬ_ССЫЛКУ")) {
+    alert("Вставь сюда ссылку Stripe.");
+    return;
+  }
+
+  window.open(link, "_blank");
+}
+
+function openCourse(key) {
+  currentCourse = key;
+  currentLevel = "junior";
+
+  hideAll();
+  document.getElementById("coursePage").classList.remove("hidden");
+
+  const paid = isAdmin() || (user && user.paidCourses && user.paidCourses.includes(key));
+
+  document.getElementById("courseHeader").innerHTML = `
+    <h2 class="title">${courseInfo[key].name}</h2>
+    <p style="text-align:center;color:var(--muted)">
+      ${paid ? "Курс открыт" : "Курс нужно оплатить"} • 105 уроков • Junior, Middle, Senior
+    </p>
+  `;
+
+  renderLevels();
+  renderLessons();
+}
+
+function renderLevels() {
+  const box = document.getElementById("levels");
+  box.innerHTML = "";
+
+  levels.forEach(level => {
+    const button = document.createElement("button");
+    button.className = "level-btn" + (currentLevel === level.key ? " active" : "");
+    button.textContent = `${level.name} • ${level.count} уроков`;
+    button.onclick = () => {
+      currentLevel = level.key;
+      renderLevels();
+      renderLessons();
+    };
+    box.appendChild(button);
+  });
+}
+
+function renderLessons() {
+  const box = document.getElementById("lessons");
+  box.innerHTML = "";
+
+  lessons[currentCourse]
+    .filter(lesson => lesson.level === currentLevel)
+    .forEach((lesson, index) => {
+      const div = document.createElement("div");
+      div.className = "lesson-card";
+      div.innerHTML = `<b>${index + 1}. ${lesson.title}</b>`;
+      div.onclick = () => openLesson(index);
+      box.appendChild(div);
+    });
+}
+
+function openLesson(index) {
+  const courseLessons = lessons[currentCourse].filter(l => l.level === currentLevel);
+  const lesson = courseLessons[index];
+  currentLesson = lesson;
+
+  hideAll();
+  document.getElementById("lessonPage").classList.remove("hidden");
+
+  document.getElementById("lessonContent").innerHTML = `
+    <h2>${lesson.title}</h2>
+    <div class="theory">${lesson.theory}</div>
+
+    <div class="quiz">
+      <b>Тест:</b> ${lesson.quiz.q}<br><br>
+      ${lesson.quiz.o.map((option, i) => `
+        <label>
+          <input type="radio" name="quiz" value="${i}">
+          ${option}
+        </label>
+      `).join("")}
+      <br><br>
+      <button onclick="checkQuiz()">Ответить</button>
+
+      <details>
+        <summary>💡 Подсказка к тесту</summary>
+        <p>${lesson.quiz.h}</p>
+      </details>
+
+      <div id="quizResult"></div>
+    </div>
+
+    <div class="quiz">
+      <b>Практическое задание:</b><br>${lesson.task.text}<br><br>
+      <textarea id="codeInput"></textarea><br><br>
+      <button onclick="checkCode()">Проверить задание</button>
+
+      <details>
+        <summary>💡 Подсказка к заданию</summary>
+        <p>${lesson.task.h}</p>
+      </details>
+
+      <div id="codeResult"></div>
+    </div>
+  `;
+}
+
+function checkQuiz() {
+  const selected = document.querySelector('input[name="quiz"]:checked');
+  const result = document.getElementById("quizResult");
+
+  if (!selected) {
+    result.textContent = "Выбери ответ.";
+    result.className = "bad";
+    return;
+  }
+
+  if (Number(selected.value) === currentLesson.quiz.a) {
+    result.textContent = "✅ Правильно! Оценка: 10/10";
+    result.className = "good";
+  } else {
+    result.textContent = "❌ Неправильно. Открой подсказку.";
+    result.className = "bad";
+  }
+}
+
+function checkCode() {
+  const code = document.getElementById("codeInput").value;
+  const result = document.getElementById("codeResult");
+
+  let correct = false;
+
+  try {
+    correct = currentLesson.task.check(code);
+  } catch (e) {
+    correct = false;
+  }
+
+  if (correct) {
+    result.textContent = "✅ Отлично! Оценка: 10/10";
+    result.className = "good";
+  } else {
+    result.textContent = "❌ Пока неправильно. Посмотри подсказку.";
+    result.className = "bad";
+  }
+}
+
+function openAuth() {
+  document.getElementById("authModal").classList.add("open");
+}
+
+function closeAuth() {
+  document.getElementById("authModal").classList.remove("open");
+}
+
+document.getElementById("authModal").addEventListener("click", function(event) {
+  if (event.target === this) closeAuth();
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") closeAuth();
+});
+
+function register() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!firstName || !lastName || !email || password.length < 4) {
+    alert("Заполни имя, фамилию, email и пароль от 4 символов.");
+    return;
+  }
+
+  const users = getUsers();
+
+  if (users.some(u => u.email === email)) {
+    alert("Такой email уже зарегистрирован.");
+    return;
+  }
+
+  const newUser = {
+    firstName,
+    lastName,
+    email,
+    password,
+    paidCourses: [],
+    registeredAt: new Date().toLocaleString()
+  };
+
+  users.push(newUser);
+  saveUsers(users);
+
+  user = newUser;
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  closeAuth();
+  updateButtons();
+  showCourses();
+  alert("Профиль создан, " + firstName + "!");
+}
+
+function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const found = getUsers().find(u => u.email === email && u.password === password);
+
+  if (!found) {
+    alert("Неверный email или пароль.");
+    return;
+  }
+
+  user = found;
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  closeAuth();
+  updateButtons();
+  showCourses();
+}
+
+function updateButtons() {
+  const authButton = document.getElementById("authButton");
+  const adminButton = document.getElementById("adminButton");
+
+  if (user) {
+    authButton.textContent = "Выйти";
+    authButton.onclick = logout;
+
+    if (isAdmin()) adminButton.classList.remove("hidden");
+  } else {
+    authButton.textContent = "Войти";
+    authButton.onclick = openAuth;
+    adminButton.classList.add("hidden");
+  }
+}
+
+function logout() {
+  user = null;
+  localStorage.removeItem("currentUser");
+  updateButtons();
+  showHome();
+}
+
+function showAdmin() {
+  if (!isAdmin()) {
+    alert("Это раздел только для администратора.");
+    return;
+  }
+
+  hideAll();
+  document.getElementById("adminPage").classList.remove("hidden");
+
+  const users = getUsers();
+
+  document.getElementById("adminList").innerHTML = users.length
+    ? users.map(u => `
+        <div class="quiz">
+          <b>${u.firstName} ${u.lastName}</b><br>
+          ${u.email}<br>
+          Регистрация: ${u.registeredAt}<br>
+          Купленные курсы: ${u.paidCourses.length ? u.paidCourses.join(", ") : "нет"}
+        </div>
+      `).join("")
+    : "<p>Пока нет зарегистрированных пользователей.</p>";
+}
+
+function hideAll() {
+  ["home", "coursesPage", "coursePage", "lessonPage", "adminPage"].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+
+const phrases = ["HTML", "CSS", "JavaScript", "Python", "SQL"];
+let phraseIndex = 0;
+let letterIndex = 0;
+let deleting = false;
+
+function typeText() {
+  const word = phrases[phraseIndex];
+  const element = document.getElementById("typingText");
+
+  if (!deleting) {
+    element.textContent = word.slice(0, letterIndex++);
+    if (letterIndex > word.length) {
+      deleting = true;
+      setTimeout(typeText, 1200);
+      return;
+    }
+  } else {
+    element.textContent = word.slice(0, letterIndex--);
+    if (letterIndex < 0) {
+      deleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+    }
+  }
+
+  setTimeout(typeText, deleting ? 45 : 105);
+}
+
+updateButtons();
+showHome();
+typeText();
+
+var i18n = {
+  ru: {
+    home:"Главная",courses:"Курсы",profile:"Профиль",login:"Войти",logout:"Выйти",admin:"Админ",
+    heroTitle:"Профессиональные курсы программирования",
+    heroText:"Более 100 уроков в каждом курсе. Уровни Junior, Middle и Senior, подробные объяснения, тесты, практические задания и подсказки.",
+    chooseCourse:"Выбрать курс",coursesTitle:"Выбери курс",lessonsCount:"уроков",
+    openCourse:"Открыть курс",payCourse:"Оплатить курс",
+    backToCourses:"← Все курсы",courseOpen:"Курс открыт",courseNeedPay:"Курс нужно оплатить",
+    test:"Тест:",answer:"Ответить",quizHint:"Подсказка к тесту",
+    task:"Практическое задание:",checkTask:"Проверить задание",taskHint:"Подсказка к заданию",
+    selectAnswer:"Выбери ответ.",quizCorrect:"Правильно! Оценка: 10/10",quizWrong:"Неправильно. Открой подсказку.",
+    taskCorrect:"Отлично! Оценка: 10/10",taskWrong:"Пока неправильно. Посмотри подсказку.",
+    profileTitle:"Профиль",profileBack:"Главная",fullName:"ФИО",email:"Email",registered:"Регистрация",
+    purchased:"Купленные курсы",none:"нет",completed:"Пройдено уроков",
+    quizCorrectStat:"Правильных ответов в тестах",quizWrongStat:"Неправильных ответов в тестах",
+    taskCorrectStat:"Правильно выполненных заданий",taskWrongStat:"Неправильно выполненных заданий",
+    authTitle:"Создать профиль / Войти",firstName:"Имя",lastName:"Фамилия",middleName:"Отчество",
+    password:"Пароль",createAccount:"Создать аккаунт",close:"Закрыть",
+    alertFill:"Заполни имя, фамилию, отчество, email и пароль от 4 символов.",
+    alertEmailExists:"Такой email уже зарегистрирован.",alertProfileCreated:"Профиль создан",
+    alertWrongLogin:"Неверный email или пароль.",alertAdminOnly:"Это раздел только для администратора.",
+    alertStripe:"Вставь сюда ссылку Stripe.",adminDesc:"Здесь видно всех зарегистрированных пользователей.",
+    noUsers:"Пока нет зарегистрированных пользователей.",part:"часть",example:"Пример",practice:"Что практиковать",
+    practiceText:"Повтори пример, измени значения и попробуй написать свой вариант. На уровне {level} задание усложняется: сначала сделай базовый вариант, затем добавь свои детали.",
+    footer:"© 2026 CodeAcademy"
+  },
+  en: {
+    home:"Home",courses:"Courses",profile:"Profile",login:"Log in",logout:"Log out",admin:"Admin",
+    heroTitle:"Professional Programming Courses",
+    heroText:"More than 100 lessons in every course. Junior, Middle and Senior levels, detailed explanations, quizzes, practical tasks and hints.",
+    chooseCourse:"Choose a course",coursesTitle:"Choose a course",lessonsCount:"lessons",
+    openCourse:"Open course",payCourse:"Buy course",
+    backToCourses:"← All courses",courseOpen:"Course unlocked",courseNeedPay:"This course must be purchased",
+    test:"Quiz:",answer:"Answer",quizHint:"Quiz hint",
+    task:"Practical task:",checkTask:"Check task",taskHint:"Task hint",
+    selectAnswer:"Choose an answer.",quizCorrect:"Correct! Score: 10/10",quizWrong:"Incorrect. Open the hint.",
+    taskCorrect:"Great! Score: 10/10",taskWrong:"Not correct yet. Check the hint.",
+    profileTitle:"Profile",profileBack:"Home",fullName:"Full name",email:"Email",registered:"Registered",
+    purchased:"Purchased courses",none:"none",completed:"Lessons completed",
+    quizCorrectStat:"Correct quiz answers",quizWrongStat:"Incorrect quiz answers",
+    taskCorrectStat:"Correctly completed tasks",taskWrongStat:"Incorrectly completed tasks",
+    authTitle:"Create profile / Log in",firstName:"First name",lastName:"Last name",middleName:"Middle name",
+    password:"Password",createAccount:"Create account",close:"Close",
+    alertFill:"Fill in your first name, last name, middle name, email and a password of at least 4 characters.",
+    alertEmailExists:"This email is already registered.",alertProfileCreated:"Profile created",
+    alertWrongLogin:"Incorrect email or password.",alertAdminOnly:"This section is for the administrator only.",
+    alertStripe:"Insert your Stripe link here.",adminDesc:"All registered users are shown here.",
+    noUsers:"There are no registered users yet.",part:"part",example:"Example",practice:"What to practice",
+    practiceText:"Repeat the example, change the values and try writing your own version. At the {level} level, the task becomes more difficult: first make the basic version, then add your own details.",
+    footer:"© 2026 CodeAcademy"
+  }
+};
+function t(k){
+  if(typeof i18n==="undefined"||!i18n||!i18n[lang])return k;
+  return i18n[lang][k]||i18n.ru[k]||k;
+}
+var enByTitle = {
+"Структура HTML-страницы":{t:"HTML Page Structure",theory:"HTML is a markup language. A page starts with <!DOCTYPE html>, followed by html, head and body tags. Styles and the page title go inside head; visible content goes inside body.",quiz:{q:"Where is the visible page content placed?",o:["head","body","title","style"],a:1,h:"Everything the user sees is inside body."},task:{text:"Create a page with an h1 heading that says Hello.",h:"Use html, body and h1 tags."}},
+"Заголовки и текст":{t:"Headings and Text",theory:"Headings use h1-h6. h1 is the most important heading and h6 the smallest. Regular text goes inside a p tag.",quiz:{q:"Which tag creates a regular paragraph?",o:["<h1>","<p>","<a>","<div>"],a:1,h:"A paragraph starts with p."},task:{text:"Create an h1 and a p paragraph with any text.",h:"Use <h1></h1> and <p></p>."}},
+"Ссылки":{t:"Links",theory:"A link uses the a tag. The address is set in href, and the link text goes between the opening and closing tags.",quiz:{q:"Which attribute sets the link address?",o:["src","href","link","url"],a:1,h:"The attribute starts with h."},task:{text:"Create a link to https://google.com.",h:"Use <a href=\"...\">text</a>."}},
+"Изображения":{t:"Images",theory:"An image uses the img tag. It has no closing tag. The image address goes in src and its description in alt.",quiz:{q:"Which attribute describes an image?",o:["alt","href","style","class"],a:0,h:"This attribute describes the image."},task:{text:"Add the image photo.jpg with a description.",h:"Use src and alt."}},
+"Списки":{t:"Lists",theory:"A bulleted list uses ul and each item uses li. A numbered list uses ol.",quiz:{q:"Which tag creates a list item?",o:["<li>","<ul>","<ol>","<list>"],a:0,h:"A list item is li."},task:{text:"Create a list with two items.",h:"Use ul and two li elements."}},
+"Формы":{t:"Forms",theory:"A form uses form. Inside it add input, textarea and button.",quiz:{q:"Which tag creates an input field?",o:["<input>","<form>","<button>","<label>"],a:0,h:"An input field is input."},task:{text:"Create a form with an input and a button.",h:"Use form, input and button."}},
+"Таблицы":{t:"Tables",theory:"A table uses table. Rows are tr, cells are td, and headers are th.",quiz:{q:"Which tag creates a table row?",o:["<tr>","<td>","<table>","<th>"],a:0,h:"A row is table row."},task:{text:"Create a table with one row.",h:"Use table, tr and td."}},
+"Классы и идентификаторы":{t:"Classes and IDs",theory:"class assigns a class; id gives a unique identifier.",quiz:{q:"Which attribute must be unique?",o:["class","id","style","href"],a:1,h:"id is unique."},task:{text:"Create an element with class box and id main.",h:"Use class=\"box\" and id=\"main\"."}},
+"Семантические теги":{t:"Semantic Tags",theory:"Semantic tags describe page sections: header, nav, main, section and footer.",quiz:{q:"Which tag represents the footer?",o:["<header>","<footer>","<main>","<nav>"],a:1,h:"Footer means footer."},task:{text:"Create header, main and footer.",h:"Use three semantic tags."}},
+"Атрибуты":{t:"Attributes",theory:"Attributes add information to tags inside the opening tag.",quiz:{q:"Where are attributes written?",o:["Inside the opening tag","After the closing tag","In a separate file","Inside the text"],a:0,h:"Attributes go in the opening tag."},task:{text:"Create a link with href.",h:"Use <a href=\"...\">."}},
+"Комментарии":{t:"Comments",theory:"Comments are not visible. They start with <!-- and end with -->.",quiz:{q:"How does an HTML comment start?",o:["<!--","//","/*","#"],a:0,h:"It starts with <!--."},task:{text:"Add an HTML comment.",h:"Use <!-- text -->."}},
+"Формы и валидация":{t:"Forms and Validation",theory:"required makes a field mandatory; placeholder shows a hint.",quiz:{q:"Which attribute makes a field required?",o:["required","placeholder","value","name"],a:0,h:"Required uses required."},task:{text:"Create a required email field.",h:"Use type=\"email\" and required."}},
+"Селекторы":{t:"Selectors",theory:"CSS selects elements and changes their style.",quiz:{q:"How do you select a class?",o:[".box","#box","box","<box>"],a:0,h:"Use a dot before a class."},task:{text:"Make the class box blue.",h:"Use .box { color: blue; }"}},
+"Цвета":{t:"Colors",theory:"Colors can use names, hex codes or rgb.",quiz:{q:"What color is #ff0000?",o:["Blue","Red","Green","White"],a:1,h:"ff0000 is red."},task:{text:"Make h1 red using hex.",h:"Use color: #ff0000;"}},
+"Шрифты":{t:"Fonts",theory:"font-family sets the font; font-size its size; font-weight its boldness.",quiz:{q:"Which property sets font size?",o:["font-size","font-family","font-weight","text-size"],a:0,h:"Size is size."},task:{text:"Make p 20px.",h:"Use font-size: 20px;"}},
+"Отступы":{t:"Spacing",theory:"margin is outer spacing; padding is inner spacing.",quiz:{q:"Which property creates inner spacing?",o:["margin","padding","border","gap"],a:1,h:"Inner spacing is padding."},task:{text:"Add padding: 20px to box.",h:"Use padding: 20px;"}},
+"Границы":{t:"Borders",theory:"border creates a border.",quiz:{q:"Which value makes a border solid?",o:["solid","dashed","none","round"],a:0,h:"Solid is solid."},task:{text:"Make a 2px solid red border.",h:"Use border: 2px solid red;"}},
+"Flexbox":{t:"Flexbox",theory:"Flexbox aligns elements.",quiz:{q:"How do you enable Flexbox?",o:["display: flex;","flex: on;","position: flex;","align: flex;"],a:0,h:"It starts with display."},task:{text:"Enable Flexbox for menu.",h:"Use display: flex;"}},
+"Grid":{t:"Grid",theory:"Grid creates a layout grid.",quiz:{q:"Which property sets Grid columns?",o:["grid-template-columns","flex-direction","columns","grid-gap"],a:0,h:"Columns are columns."},task:{text:"Create a Grid with two columns.",h:"Use display: grid; and grid-template-columns: 1fr 1fr;"}},
+"Позиционирование":{t:"Positioning",theory:"position changes placement.",quiz:{q:"Which value fixes an element?",o:["fixed","relative","static","absolute"],a:0,h:"Fixed is fixed."},task:{text:"Make an element fixed.",h:"Use position: fixed;"}},
+"Анимации":{t:"Animations",theory:"Animations use @keyframes and animation.",quiz:{q:"Which rule creates an animation?",o:["@keyframes","@media","@import","@animation"],a:0,h:"It starts with @keyframes."},task:{text:"Create keyframes named move.",h:"Use @keyframes move { }"}},
+"Тени":{t:"Shadows",theory:"box-shadow adds a shadow.",quiz:{q:"Which property adds a shadow?",o:["box-shadow","shadow","text-shadow","border-shadow"],a:0,h:"Block shadow is box-shadow."},task:{text:"Add a shadow to card.",h:"Use box-shadow."}},
+"Адаптивность":{t:"Responsiveness",theory:"Media queries change styles for screens.",quiz:{q:"Which rule is used for responsiveness?",o:["@media","@keyframes","@import","@font"],a:0,h:"It starts with @media."},task:{text:"Create a media query for 600px.",h:"Use @media (max-width: 600px) { }"}},
+"Градиенты":{t:"Gradients",theory:"A gradient uses linear-gradient.",quiz:{q:"Which function creates a linear gradient?",o:["linear-gradient","color-gradient","gradient()","bg-gradient"],a:0,h:"Linear is linear."},task:{text:"Make a gradient purple to cyan.",h:"Use linear-gradient(90deg, purple, cyan);"}},
+"Переменные":{t:"Variables",theory:"let is changeable; const is constant.",quiz:{q:"How do you create a constant?",o:["let","const","var","static"],a:1,h:"Constant is const."},task:{text:"Create const city = London.",h:"Use const city = \"London\";"}},
+"Типы данных":{t:"Data Types",theory:"JavaScript has strings, numbers, booleans, arrays and objects.",quiz:{q:"What type is true?",o:["String","Number","Boolean","Array"],a:2,h:"true is Boolean."},task:{text:"Create isActive = true.",h:"Use let isActive = true;"}},
+"Функции":{t:"Functions",theory:"A function is reusable code.",quiz:{q:"What does return do?",o:["Prints text","Returns a result","Creates a variable","Stops the site"],a:1,h:"return returns a value."},task:{text:"Write add(a, b) returning the sum.",h:"Use return a + b;"}},
+"Условия":{t:"Conditions",theory:"if checks a condition; else runs otherwise.",quiz:{q:"Which operator means >= ?",o:[">",">=","<","=="],a:1,h:"It uses two symbols."},task:{text:"Check age >= 18.",h:"Use if (age >= 18) { }"}},
+"Циклы":{t:"Loops",theory:"A for loop repeats code.",quiz:{q:"How many times does for (let i = 0; i < 5; i++) run?",o:["4","5","6","Infinitely"],a:1,h:"From 0 to 4 is five times."},task:{text:"Write a loop from 0 to 4.",h:"Use for (let i = 0; i < 5; i++)"}},
+"Массивы":{t:"Arrays",theory:"Arrays store several values; indexes start at 0.",quiz:{q:"What is the first array index?",o:["0","1","-1","first"],a:0,h:"It starts at zero."},task:{text:"Create an array with three fruits.",h:"Use square brackets and commas."}},
+"Объекты":{t:"Objects",theory:"Objects store key-value pairs.",quiz:{q:"How do you get name from user?",o:["user.name","user->name","user[name]","getName(user)"],a:0,h:"Use a dot."},task:{text:"Create user with name.",h:"Use curly braces and name: \"...\""}},
+"Стрелочные функции":{t:"Arrow Functions",theory:"An arrow function is a shorter function.",quiz:{q:"Which symbol is used?",o:["=>","->","::","**"],a:0,h:"It is =>."},task:{text:"Create an arrow function add.",h:"Use const add = (a, b) => a + b;"}},
+"DOM":{t:"DOM",theory:"The DOM lets JavaScript change page elements.",quiz:{q:"Which method finds an element?",o:["querySelector","findElement","getElement","search"],a:0,h:"It starts with query."},task:{text:"Find h1 with querySelector.",h:"Use document.querySelector(\"h1\")"}},
+"События":{t:"Events",theory:"Events are user actions.",quiz:{q:"Which event happens on click?",o:["click","submit","change","move"],a:0,h:"Click is click."},task:{text:"Add a click handler.",h:"Use addEventListener(\"click\", ...)"}},
+"Массивы и методы":{t:"Arrays and Methods",theory:"map creates a new array.",quiz:{q:"Which method creates a new array?",o:["map","push","pop","splice"],a:0,h:"map transforms elements."},task:{text:"Use map on numbers.",h:"Use numbers.map(...)"}},
+"Ошибки":{t:"Errors",theory:"try catches errors; catch handles them.",quiz:{q:"Which block handles an error?",o:["catch","try","finally","error"],a:0,h:"Errors are handled in catch."},task:{text:"Write try and catch.",h:"Use try { } catch (e) { }"}},
+"Первые шаги":{t:"First Steps",theory:"Python has simple syntax. print() outputs text.",quiz:{q:"Which function outputs text?",o:["print()","echo","console.log()","say()"],a:0,h:"Python uses print()."},task:{text:"Print Привет, Python.",h:"Write print(\"Привет, Python\")"}},
+"Числа":{t:"Numbers",theory:"Python works with integers and decimals.",quiz:{q:"What does 10 / 2 output?",o:["5","5.0","10","error"],a:1,h:"Division gives a decimal."},task:{text:"Print 10 * 5.",h:"Use print(10 * 5)"}},
+"Строки":{t:"Strings",theory:"Strings are text in quotes.",quiz:{q:"What does upper() do?",o:["Makes letters uppercase","Removes spaces","Counts characters","Splits a string"],a:0,h:"upper means uppercase."},task:{text:"Make hello uppercase.",h:"Use .upper()"}},
+"Цикл for":{t:"for Loop",theory:"for iterates over items.",quiz:{q:"How many times does range(5) run?",o:["4","5","6","0"],a:1,h:"It gives 0 to 4."},task:{text:"Write a for loop with range(5).",h:"Use for i in range(5):"}},
+"Словари":{t:"Dictionaries",theory:"Dictionaries store key-value pairs.",quiz:{q:"How do you get name from user?",o:["user[\"name\"]","user.name","user->name","user::name"],a:0,h:"Use square brackets."},task:{text:"Create a dictionary with name.",h:"Use curly braces and \"name\": ..."}},
+"Модули":{t:"Modules",theory:"Modules are imported with import.",quiz:{q:"How do you import math?",o:["import math","include math","using math","require math"],a:0,h:"Python uses import."},task:{text:"Import math.",h:"Write import math"}},
+"Файлы":{t:"Files",theory:"Files open with open(). r reads; w writes.",quiz:{q:"Which mode reads a file?",o:["r","w","x","a"],a:0,h:"Read is r."},task:{text:"Open data.txt for reading.",h:"Use open(\"data.txt\", \"r\")"}}
+};
+function escapeHtml(v){return String(v).replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");}
+function getExample(theory){const a=theory.indexOf("<pre>"),b=theory.indexOf("</pre>");return a===-1||b===-1?"":theory.slice(a+5,b);}
+function getEnLesson(lesson){
+  const base=lesson.title.split(" — ")[0],en=enByTitle[base];
+  if(!en)return lesson;
+  const m=lesson.title.match(/— часть (\d+)/),part=m?m[1]:"1";
+  return {level:lesson.level,title:en.t+" — "+t("part")+" "+part,theory:"<h3>"+en.t+"</h3><p>"+en.theory+"</p><h3>"+t("example")+"</h3><pre>"+escapeHtml(getExample(lesson.theory))+"</pre><h3>"+t("practice")+"</h3><p>"+t("practiceText").replace("{level}",lesson.level)+"</p>",quiz:en.quiz,task:en.task};
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  const map={homeBtn:"home",coursesBtn:"courses",profileButton:"profile",heroTitle:"heroTitle",heroText:"heroText",chooseCourseBtn:"chooseCourse",coursesTitle:"coursesTitle",backToCoursesBtn:"backToCourses",adminTitle:"admin",adminDesc:"adminDesc",authTitle:"authTitle",registerBtn:"createAccount",loginBtn:"login",closeAuthBtn:"close",profileTitle:"profileTitle",profileBackBtn:"profileBack",footerText:"footer"};
+  for(const id in map){const el=document.getElementById(id);if(el)el.textContent=t(map[id]);}
+  [["firstName","firstName"],["lastName","lastName"],["middleName","middleName"],["email","email"],["password","password"]].forEach(function(p){const el=document.getElementById(p[0]);if(el)el.placeholder=t(p[1]);});
+  updateButtons();
+}
+function refreshView(){
+  if(!document.getElementById("home").classList.contains("hidden"))showHome();
+  else if(!document.getElementById("coursesPage").classList.contains("hidden"))showCourses();
+  else if(!document.getElementById("coursePage").classList.contains("hidden"))openCourse(currentCourse);
+  else if(!document.getElementById("lessonPage").classList.contains("hidden"))openLesson(currentLessonIndex);
+  else if(!document.getElementById("profilePage").classList.contains("hidden"))showProfile();
+  else if(!document.getElementById("adminPage").classList.contains("hidden"))showAdmin();
+}
+function setLang(newLang){lang=newLang;applyLang();refreshView();}
+function showCourses(){
+  hideAll();document.getElementById("coursesPage").classList.remove("hidden");
+  const box=document.getElementById("courses");box.innerHTML="";
+  for(let key in courseInfo){
+    const paid=user&&user.paidCourses&&user.paidCourses.includes(key);
+    const div=document.createElement("div");div.className="card";
+    div.innerHTML="<h3>"+courseInfo[key].name+"</h3><p>105 "+t("lessonsCount")+" • Junior, Middle, Senior</p><div class=\"price\">"+courseInfo[key].price.toLocaleString(lang==="ru"?"ru-RU":"en-GB")+" ₽</div>"+(isAdmin()||paid?'<button onclick="openCourse(\''+key+'\')">'+t("openCourse")+"</button>":'<button onclick="pay(\''+key+'\')">'+t("payCourse")+"</button>");
+    box.appendChild(div);
+  }
+}
+function pay(key){
+  if(isAdmin()){openCourse(key);return;}
+  if(!user){openAuth();return;}
+  const link=courseInfo[key].stripeLink;
+  if(link.includes("ВСТАВЬ_ССЫЛКУ")){alert(t("alertStripe"));return;}
+  window.open(link,"_blank");
+}
+function openCourse(key){
+  currentCourse=key;currentLevel="junior";hideAll();
+  document.getElementById("coursePage").classList.remove("hidden");
+  const paid=isAdmin()||(user&&user.paidCourses&&user.paidCourses.includes(key));
+  document.getElementById("courseHeader").innerHTML="<h2 class=\"title\">"+courseInfo[key].name+"</h2><p style=\"text-align:center;color:var(--muted)\">"+(paid?t("courseOpen"):t("courseNeedPay"))+" • 105 "+t("lessonsCount")+" • Junior, Middle, Senior</p>";
+  renderLevels();renderLessons();
+}
+function renderLevels(){
+  const box=document.getElementById("levels");box.innerHTML="";
+  levels.forEach(function(level){
+    const b=document.createElement("button");b.className="level-btn"+(currentLevel===level.key?" active":"");
+    b.textContent=level.name+" • "+level.count+" "+t("lessonsCount");
+    b.onclick=function(){currentLevel=level.key;renderLevels();renderLessons();};
+    box.appendChild(b);
+  });
+}
+function renderLessons(){
+  const box=document.getElementById("lessons");box.innerHTML="";
+  lessons[currentCourse].filter(function(l){return l.level===currentLevel;}).forEach(function(lesson,index){
+    const shown=lang==="en"?getEnLesson(lesson):lesson;
+    const d=document.createElement("div");d.className="lesson-card";
+    d.innerHTML="<b>"+(index+1)+". "+shown.title+"</b>";d.onclick=function(){openLesson(index);};box.appendChild(d);
+  });
+}
+var currentLessonIndex=0,lessonAttempt={quizOk:false,taskOk:false};
+function openLesson(index){
+  const list=lessons[currentCourse].filter(function(l){return l.level===currentLevel;});
+  const original=list[index],lesson=lang==="en"?getEnLesson(original):original;
+  currentLessonIndex=index;currentLesson=lesson;lessonAttempt={quizOk:false,taskOk:false};
+  hideAll();document.getElementById("lessonPage").classList.remove("hidden");
+  const options=lesson.quiz.o.map(function(o,i){return '<label><input type="radio" name="quiz" value="'+i+'"> '+o+"</label>";}).join("");
+  document.getElementById("lessonContent").innerHTML="<h2>"+lesson.title+"</h2><div class=\"theory\">"+lesson.theory+"</div><div class=\"quiz\"><b>"+t("test")+"</b> "+lesson.quiz.q+"<br><br>"+options+"<br><br><button onclick=\"checkQuiz()\">"+t("answer")+"</button><details><summary>"+t("quizHint")+"</summary><p>"+lesson.quiz.h+"</p></details><div id=\"quizResult\"></div></div><div class=\"quiz\"><b>"+t("task")+"</b><br>"+lesson.task.text+"<br><br><textarea id=\"codeInput\"></textarea><br><br><button onclick=\"checkCode()\">"+t("checkTask")+"</button><details><summary>"+t("taskHint")+"</summary><p>"+lesson.task.h+"</p></details><div id=\"codeResult\"></div></div>";
+}
+function saveCurrentUser(){
+  if(!user)return;localStorage.setItem("currentUser",JSON.stringify(user));
+  const users=getUsers(),i=users.findIndex(function(u){return u.email===user.email;});
+  if(i>-1){users[i]=user;saveUsers(users);}
+}
+function normalizeUser(u){
+  u.stats=u.stats||{lessonsCompleted:0,quizCorrect:0,quizWrong:0,taskCorrect:0,taskWrong:0};
+  u.completedLessons=u.completedLessons||[];return u;
+}
+function addStat(type,ok){
+  if(!user)return;user=normalizeUser(user);
+  if(type==="quiz"){if(ok)user.stats.quizCorrect++;else user.stats.quizWrong++;}
+  if(type==="task"){if(ok)user.stats.taskCorrect++;else user.stats.taskWrong++;}
+  const key=currentCourse+"-"+currentLevel+"-"+currentLessonIndex;
+  if(lessonAttempt.quizOk&&lessonAttempt.taskOk&&user.completedLessons.indexOf(key)===-1){user.completedLessons.push(key);user.stats.lessonsCompleted++;}
+  saveCurrentUser();
+}
+function checkQuiz(){
+  const s=document.querySelector('input[name="quiz"]:checked'),r=document.getElementById("quizResult");
+  if(!s){r.textContent=t("selectAnswer");r.className="bad";return;}
+  if(Number(s.value)===currentLesson.quiz.a){lessonAttempt.quizOk=true;addStat("quiz",true);r.textContent=t("quizCorrect");r.className="good";}
+  else{addStat("quiz",false);r.textContent=t("quizWrong");r.className="bad";}
+}
+function checkCode(){
+  const code=document.getElementById("codeInput").value,r=document.getElementById("codeResult");let ok=false;
+  try{ok=currentLesson.task.check(code);}catch(e){ok=false;}
+  if(ok){lessonAttempt.taskOk=true;addStat("task",true);r.textContent=t("taskCorrect");r.className="good";}
+  else{addStat("task",false);r.textContent=t("taskWrong");r.className="bad";}
+}
+function register(){
+  const firstName=document.getElementById("firstName").value.trim(),lastName=document.getElementById("lastName").value.trim(),middleName=document.getElementById("middleName").value.trim(),email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+  if(!firstName||!lastName||!middleName||!email||password.length<4){alert(t("alertFill"));return;}
+  const users=getUsers();
+  if(users.some(function(u){return u.email===email;})){alert(t("alertEmailExists"));return;}
+  const newUser=normalizeUser({firstName:firstName,lastName:lastName,middleName:middleName,email:email,password:password,paidCourses:[],registeredAt:new Date().toLocaleString(),stats:{lessonsCompleted:0,quizCorrect:0,quizWrong:0,taskCorrect:0,taskWrong:0},completedLessons:[]});
+  users.push(newUser);saveUsers(users);user=newUser;localStorage.setItem("currentUser",JSON.stringify(user));
+  closeAuth();updateButtons();showCourses();alert(t("alertProfileCreated")+", "+firstName+"!");
+}
+function login(){
+  const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+  const found=getUsers().find(function(u){return u.email===email&&u.password===password;});
+  if(!found){alert(t("alertWrongLogin"));return;}
+  user=normalizeUser(found);localStorage.setItem("currentUser",JSON.stringify(user));
+  closeAuth();updateButtons();showCourses();
+}
+function updateButtons(){
+  const a=document.getElementById("authButton"),p=document.getElementById("profileButton"),ad=document.getElementById("adminButton");
+  if(user){a.textContent=t("logout");a.onclick=logout;p.classList.remove("hidden");if(isAdmin())ad.classList.remove("hidden");else ad.classList.add("hidden");}
+  else{a.textContent=t("login");a.onclick=openAuth;p.classList.add("hidden");ad.classList.add("hidden");}
+}
+function showProfile(){
+  if(!user){openAuth();return;}
+  hideAll();document.getElementById("profilePage").classList.remove("hidden");user=normalizeUser(user);
+  document.getElementById("profileInfo").innerHTML='<div class="quiz"><b>'+t("fullName")+':</b> '+user.lastName+" "+user.firstName+" "+(user.middleName||"")+"<br><b>"+t("email")+":</b> "+user.email+"<br><b>"+t("registered")+":</b> "+user.registeredAt+"<br><b>"+t("purchased")+":</b> "+(user.paidCourses.length?user.paidCourses.join(", "):t("none"))+'</div><div class="quiz"><b>'+t("completed")+":</b> "+user.stats.lessonsCompleted+"<br><b>"+t("quizCorrectStat")+":</b> "+user.stats.quizCorrect+"<br><b>"+t("quizWrongStat")+":</b> "+user.stats.quizWrong+"<br><b>"+t("taskCorrectStat")+":</b> "+user.stats.taskCorrect+"<br><b>"+t("taskWrongStat")+":</b> "+user.stats.taskWrong+"</div>";
+}
+function showAdmin(){
+  if(!isAdmin()){alert(t("alertAdminOnly"));return;}
+  hideAll();document.getElementById("adminPage").classList.remove("hidden");
+  const users=getUsers();
+  document.getElementById("adminList").innerHTML=users.length?users.map(function(s){const u=normalizeUser(s);return '<div class="quiz"><b>'+u.lastName+" "+u.firstName+" "+(u.middleName||"")+"</b><br>"+u.email+"<br>"+t("registered")+": "+u.registeredAt+"<br>"+t("purchased")+": "+(u.paidCourses.length?u.paidCourses.join(", "):t("none"))+"<br>"+t("completed")+": "+u.stats.lessonsCompleted+"<br>"+t("quizCorrectStat")+": "+u.stats.quizCorrect+"<br>"+t("quizWrongStat")+": "+u.stats.quizWrong+"<br>"+t("taskCorrectStat")+": "+u.stats.taskCorrect+"<br>"+t("taskWrongStat")+": "+u.stats.taskWrong+"</div>";}).join(""):"<p>"+t("noUsers")+"</p>";
+}
+function hideAll(){
+  ["home","coursesPage","coursePage","lessonPage","profilePage","adminPage"].forEach(function(id){document.getElementById(id).classList.add("hidden");});
+}
+if(user)user=normalizeUser(user);
+applyLang();
+
+</script>
+
+</body>
+</html>
